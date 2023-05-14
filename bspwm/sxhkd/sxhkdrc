@@ -1,0 +1,165 @@
+
+# BSPWM 
+
+
+#АВТОСТАРТ
+sxhkd &
+~/.config/polybar/launch.sh
+xsetroot -cursor_name left_ptr &
+# --- Restart BSPWM and sxhkd --- #
+super + shift + r
+	bspc wm -r
+
+# --- Quit BSPWM --- #
+ctrl + alt + q 
+    killall bash \
+    bspc quit
+
+# --- Toggle between tiled and monocle mode --- #
+super + m
+	bspc desktop -l next
+
+# --- Close window --- #
+super + q
+    bspc node -c
+
+# --- Kill current window --- #
+super + shift + q 
+    bspc node -k
+
+# --- Tiled / pseudo_tiled mode --- #
+super + shift + f 
+    bspc node -t {pseudo_tiled,tiled}
+
+# --- Floating / tiled mode --- #
+super + shift + space
+    bspc node -t "~"{floating,tiled}
+
+# --- Swap to next / prev workspace --- #
+ctrl + alt + {Left,Right}
+	bspc desktop -f {prev.local,next.local}
+
+# --- Switch to workspace --- #
+alt + {1,2,3,4,7,8,9,0}
+     
+      bspc desktop -f {1,2,3,4,7,8,9,0}
+
+
+
+
+# focus the last node/desktop
+alt + {grave,Tab}
+  bspc {node,desktop} -f last
+
+
+
+# WINDOWS (not Microsoft xd)
+
+# --- Focus (super + {jkl;}) and swap (super + shift + {jkl;}) windows --- #
+super + {_,shift + }{h,l,j,k}
+    bspc node --{focus,swap} {west,east,south,north}
+
+
+# --- Focus floating / tiles / next window --- #
+super + {_,shift + }n
+	bspc node -f {next,prev}.local.!hidden.window
+
+# --- Fullscreen mode --- #
+super + f
+    bspc node -t "~"fullscreen
+
+# --- Resize windows --- #
+super + shift + {Left,Down,Up,Right}
+  STEP=40; SELECTION={1,2,3,4}; \
+  bspc node -z $(echo "left -$STEP 0,bottom 0 $STEP,top 0 -$STEP,right $STEP 0" | cut -d',' -f$SELECTION) || \
+  bspc node -z $(echo "right -$STEP 0,top 0 $STEP,bottom 0 -$STEP,left $STEP 0" | cut -d',' -f$SELECTION)
+
+# --- Move active window to workspace {number} --- #
+super + shift + {1,2,3,4,7,8,9,0}
+    bspc node -d {1,2,3,4,7,8,9,0} 
+
+
+# APPS ---------------------------------------------------------------- #
+
+
+
+# --- Open terminal emulator --- #
+shift + Return 
+      st 
+
+ctrl + Print 
+    flameshot gui
+
+
+alt + p
+	popcorn-time
+
+
+
+
+alt + g
+   xrandr -s 1280x1024 & flatpak run com.valvesoftware.Steam steam://rungameid/730
+
+Print
+	scrot -d 0 '/tmp/%F%T$wx$h.png' -e 'xclip -selection clipboard -target image/png -i $f'
+
+
+
+# --- Open file explorer --- # 
+alt + F1
+    nemo 
+
+# --- Open Spotify --- #
+alt + s
+    spotify
+
+# --- Open Google Chrome --- #
+alt + c 
+	firefox
+# --- Open Discord --- #
+alt + d 
+    discord
+
+
+
+alt + t 
+    telegram-desktop
+# Other ---------------------------------------------------------------- #
+
+alt + F8
+	sudo systemctl restart ly.service
+
+# --- Open application launcher --- #
+#
+alt + space 
+
+    rofi -show drun
+
+
+# ---------------------------------------------------------------- #
+
+
+# ---------------------------------------------------------------- #
+
+#Volume Control
+F10
+	amixer set Master 10%-
+F11
+	amixer set Master 10%+
+F9
+        amixer set Master toggle
+
+
+# move/resize
+
+# move a floating window
+ctrl + shift + {h,j,k,l}
+	bspc node -v {-70 0,0 70,0 -70,70 0}
+
+
+#
+
+# expand a window by moving one of its side outward
+super + alt + {h,j,k,l}
+	bspc node -z {left -50 0,bottom 0 50,top 0 -50,right 50 0}
+
